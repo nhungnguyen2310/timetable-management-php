@@ -1,0 +1,124 @@
+body {
+	font-family: Roboto;
+}
+
+.container {
+	width: 50%;
+	min-width: 640px;
+	margin: 100px auto;
+	padding: 20px;
+	border: 1px solid #43729d;
+	font-size: 20px;
+}
+
+.logout {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	width: 60%;
+	min-width: 400px;
+	align-items: stretch;
+	margin: 0 auto;
+}
+
+.form_item {
+	display: flex;
+	justify-content: center;
+	margin: 5px 0;
+}
+
+.label {
+	display: flex;
+	width: 100px;
+	height: 50px;
+	align-items: center;
+	box-sizing: border-box;
+}
+
+.form_item_input {
+	width: 100%;
+	border: 1px solid #43729d;
+	background-color: #e3f2ff;
+	font-size: 20px;
+	padding-left: 15px;
+}
+
+.select_box {
+	width: 100%;
+	background-color: #e3f2ff;
+	border: 1px solid #43729d;
+	font-size: 20px;
+	padding-left: 10px;
+}
+
+.button_logout {
+	font-size: 20px;
+	padding: 0px;
+	margin: 0px;
+	margin-bottom: 10px;
+	color: blue;
+	text-decoration: underline;
+	background-color: white;
+	border: 1px solid white;
+	cursor: pointer;
+}
+
+.button {
+	display: flex;
+	justify-content: center;
+	min-width: 100px;
+	font-size: 20px;
+	padding: 10px 20px;
+	margin: 5px auto;
+	color: white;
+	background-color: #3979b3;
+	border: 1px solid #43729d;
+	border-radius: 30px;
+	cursor: pointer;
+}
+
+.button:hover {
+	background-color: #153654;
+}
+
+.button:active {
+	background-color: #11273b;
+}
+
+.information {
+	margin-bottom: 20px;
+}
+
+table {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+td, th {
+	padding: 10px;
+	text-align: center;
+}
+
+table, td, th {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.th_avatar, .td_avatar {
+	width: 125px;
+	padding: 0;
+}
+
+.td_avatar {
+	margin: 0;
+}
+
+td img {
+	display: flex;
+	width: 125px;
+	height: auto;
+}
