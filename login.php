@@ -31,7 +31,7 @@
 			if (strlen($_POST["username"]) < 4) {
 				$errors["username"] = "Hãy nhập tài khoản có tối thiểu 4 ký tự!";
 			} else {
-				$username = $_POST["username"];
+				$username = format($_POST["username"]);
 			}
 		}
 
@@ -41,7 +41,7 @@
 			if (strlen($_POST["password"]) < 6) {
 				$errors["password"] = "Hãy nhập mật khẩu có tối thiểu 6 ký tự!";
 			} else {
-				$password = $_POST["password"];
+				$password = format($_POST["password"]);
 				$encrypted_password = md5($password);
 			}
 		}
