@@ -38,6 +38,11 @@ td, th {
 	width: 50%;
 }
 
+.pass #span {
+	text-align: left!important;
+	padding-left: 5px;
+}
+
 .error {
 	color: red;
 }

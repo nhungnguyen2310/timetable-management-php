@@ -18,22 +18,33 @@
 			<div class="form_title">
 				<span><?php echo "THÊM THÔNG TIN GIÁO VIÊN"?></span>
 			</div>
-			<div class="form_error">
-				<?php
-					if (isset($errors)) {
-						foreach ($errors as $key => $value) {
-							echo '<span class="error">' . $value . '</span>';
-							echo '<br>';
-						}
-					}
-				?>
-			</div>
 			<div class="form">
+				<div class="form_error_">
+					<?php
+						if (isset($errors["duplicate"])) {
+							echo '<span class="error">' . $errors["duplicate"] . '</span><br>';
+						}
+					?>
+				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["name"])) {
+							echo '<span class="error">' . $errors["name"] . '</span><br>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Tên giáo viên"?></label>
 					</div>
-					<input class="form_item_input" name="add_name" placeholder="Nhập tên giáo viên" maxlength="250" value="<?php if (isset($name) && !isset($errors["duplicate"])) { echo $name; }?>">
+					<input class="form_item_input" name="add_name" placeholder="Nhập tên giáo viên" maxlength="100" value="<?php if (!empty($name) && !isset($errors["duplicate"])) { echo $name; }?>">
+				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["subject_id"])) {
+							echo '<span class="error">' . $errors["subject_id"] . '</span><br>';
+						}
+					?>
 				</div>
 				<div class="form_item">
 					<div class="form_item_title">
@@ -42,9 +53,10 @@
 					<select class="select_box form_item_input" name="add_subject_id">
 						<?php
 							$subjects = getSubjects();
+							if ($subject_id != -1) $subject = getSubjectName($subject_id);
 							$chose = "";
 							foreach ($subjects as $key => $value) {
-								if (isset($subject) && ($subject == $key) && !isset($errors["duplicate"])) {
+								if (isset($subject) && ($subject == $key || $subject == $value) && !isset($errors["duplicate"])) {
 									$chose = "selected";
 								} else {
 									$chose = "";
@@ -54,17 +66,37 @@
 						?>
 					</select>
 				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["degree"])) {
+							echo '<span class="error">' . $errors["degree"] . '</span><br>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Học vị"?></label>
 					</div>
-					<input class="form_item_input" id="form_item" name="add_degree" placeholder="Nhập học vị" maxlength="30" value="<?php if (isset($degree) && !isset($errors["duplicate"])) { echo $degree; }?>">
+					<select class="select_box" name="add_degree">
+						<?php
+							$chose = "";
+							foreach ($degrees as $key => $value) {
+								if (isset($degree) && ($degree == $key || $degree == $value) && !isset($errors["duplicate"])) {
+									$chose = "selected";
+								} else {
+									$chose = "";
+								}
+								echo '<option value=' . $key . ' ' . $chose . '>' . $value . '</option>';
+							}
+						?>
+					</select>
 				</div>
-				<div class="form_item">
-					<div class="form_item_title">
-						<label class="label"><?php echo "Mô tả chi tiết"?></label>
-					</div>
-					<input class="form_item_input" name="add_description" placeholder="Nhập mô tả chi tiết" value="<?php if (isset($description) && !isset($errors["duplicate"])) { echo $description; }?>">
+				<div class="form_error">
+					<?php
+						if (isset($errors["avatar"])) {
+							echo '<span class="error">' . $errors["avatar"] . '</span><br>';
+						}
+					?>
 				</div>
 				<div class="form_item">
 					<div class="form_item_title">
@@ -72,16 +104,33 @@
 					</div>
 					<div class="form_item_image">
 						<div class="form_item_avatar">
-							<img id="add_avatar" src="../../web/avatar/temp.jpg">
+							<?php
+								$avt = "temp.jpg";
+								if (!empty($avatar)) $avt = "tmp/" . $avatar;
+								echo "<img id='add_avatar' src='../../web/avatar/$avt'>"
+							?>
 						</div>
 						<div class="form_item_file" id="browse">
-							<div class="form_item_filename" id="filename"></div>
+							<div class="form_item_filename" id="filename"><?php if (str_contains($avt, "tmp")) { echo explode("/", $avt)[1]; } ?></div>
 							<div class="form_item_button">
 								<label class="form_item_upload" for="_avatar"><?php echo "Browse"?></label>
 								<input type="file" id="_avatar" name="add_avatar" accept="image/*"/>
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["description"])) {
+							echo '<span class="error">' . $errors["description"] . '</span><br>';
+						}
+					?>
+				</div>
+				<div class="form_item">
+					<div class="form_item_title">
+						<label class="label"><?php echo "Mô tả chi tiết"?></label>
+					</div>
+					<textarea class="form_item_textarea" name="add_description" placeholder="Nhập mô tả chi tiết" maxlength="1000"><?php if (isset($description) && !isset($errors["duplicate"])) { echo $description; }?></textarea>
 				</div>
 			</div>
 			<div class="buttons">

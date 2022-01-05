@@ -20,7 +20,7 @@
 			<div class="form">
 				<div class="form_item">
 					<div class="form_item_title">
-						<label class="label"><?php echo "Khóa"?></label>
+						<label class="label"><?php echo "Năm học"?></label>
 					</div>
 					<div class="form_item_information">
 						<span><?php echo $school_year?></span>
@@ -68,7 +68,7 @@
 				</div>
 			</div>
 			<div class="buttons">
-				<input class="button" name="home" type="submit" value="Quay lại">
+				<input class="button" name="back_add" type="submit" value="Sửa lại">
 				<input class="button" name="add_confirm" type="submit" value="Xác nhận">
 			</div>
 		</form>

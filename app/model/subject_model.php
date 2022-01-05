@@ -1,23 +1,19 @@
 <?php
-	function getSubjects() {
+	function getSubjects($school_year="", $keyword="") {
 		global $db;
-		$query = "SELECT * FROM subjects ORDER BY school_year";
-		$statement = $db->prepare($query);
-		$statement->execute();
-		$count = $statement->rowCount();
-		$subjects = $statement->fetchAll(PDO::FETCH_ASSOC);
-		return array($count, $subjects);
-	}
-
-	function search($keyword, $school_year="") {
-		global $db;
-		if (empty($keyword)) {
-			$keyword = "%%";
+		$query = "SELECT * FROM subjects";
+		if (!empty($school_year)) {
+			$query .= " WHERE school_year = '$school_year'";
 		}
-		if (empty($school_year)) {
-			$school_year = "%%";
+		if (!empty($keyword)) {
+			if (str_contains($query, "WHERE")) {
+				$query .= " AND ";
+			} else {
+				$query .= " WHERE ";
+			}
+			$query .= "(name LIKE '%$keyword%' OR description LIKE '%$keyword%')";
 		}
-		$query = "SELECT * FROM subjects WHERE (name LIKE '%$keyword%' OR description LIKE '%$keyword%' OR school_year LIKE '%$keyword%') AND school_year LIKE '%$school_year%' ORDER BY school_year";
+		$query .= " ORDER BY id DESC";
 		$statement = $db->prepare($query);
 		$statement->execute();
 		$count = $statement->rowCount();
@@ -33,7 +29,9 @@
 		$count2 = $statement2->rowCount();
 		if ($count2 > 0) {
 			foreach ($statement2 as $teacher) {
-				unlink("../../web/avatar/" . $teacher["avatar"] . "");
+				if ($teacher["avatar"] != "temp.jpg") {
+					unlink("../../web/avatar/" . $teacher["avatar"]);
+				}
 			}
 		}
 		$query = "DELETE FROM subjects WHERE id = '$subject_id'";
@@ -56,9 +54,9 @@
 		$statement->execute();
 	}
 
-	function check($name, $school_year) {
+	function check($name, $school_year, $description) {
 		global $db;
-		$query = "SELECT * FROM subjects WHERE name = '$name' AND school_year = '$school_year'";
+		$query = "SELECT * FROM subjects WHERE name = '$name' AND school_year = '$school_year' AND description = '$description'";
 		$statement = $db->prepare($query);
 		$statement->execute();
 		$count = $statement->rowCount();

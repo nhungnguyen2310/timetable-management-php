@@ -1,26 +1,27 @@
 <?php
-	function getSchedules() {
+	function getSchedules($school_year="", $subject="", $teacher="") {
 		global $db;
-		$query = "SELECT * FROM schedules ORDER BY weekday";
-		$statement = $db->prepare($query);
-		$statement->execute();
-		$count = $statement->rowCount();
-		$schedules = $statement->fetchAll(PDO::FETCH_ASSOC);
-		return array($count, $schedules);
-	}
-
-	function search($keyword, $school_year="", $subject="") {
-		global $db;
-		if (empty($keyword)) {
-			$keyword = "%%";
+		$query = "SELECT schedules.id, schedules.teacher_id, schedules.weekday, schedules.lesson, schedules.notes FROM schedules INNER JOIN teachers ON schedules.teacher_id = teachers.id INNER JOIN subjects ON teachers.subject_id = subjects.id";
+		if (!empty($school_year)) {
+			$query .= " WHERE subjects.school_year = '$school_year'";
 		}
-		if (empty($school_year)) {
-			$school_year = "%%";
+		if (!empty($subject)) {
+			if (str_contains($query, "WHERE")) {
+				$query .= " AND ";
+			} else {
+				$query .= " WHERE ";
+			}
+			$query .= "subjects.name = '$subject'";
 		}
-		if (empty($subject)) {
-			$subject = "%%";
+		if (!empty($teacher)) {
+			if (str_contains($query, "WHERE")) {
+				$query .= " AND ";
+			} else {
+				$query .= " WHERE ";
+			}
+			$query .= "teachers.name = '$teacher'";
 		}
-		$query = "SELECT schedules.teacher_id, schedules.weekday, schedules.lesson, schedules.notes FROM schedules INNER JOIN teachers ON schedules.teacher_id = teachers.id INNER JOIN subjects ON teachers.subject_id = subjects.id WHERE subjects.school_year LIKE '%$school_year%' AND subjects.name LIKE '%$subject%' AND (subjects.name LIKE '%$keyword%' OR teachers.name LIKE '%$keyword%' OR schedules.weekday LIKE '%$keyword%' OR schedules.lesson LIKE '%$keyword%' OR schedules.notes LIKE '%$keyword%') ORDER BY schedules.weekday";
+		$query .= " ORDER BY schedules.id DESC";
 		$statement = $db->prepare($query);
 		$statement->execute();
 		$count = $statement->rowCount();
@@ -121,7 +122,7 @@
 		return $result;
 	}
 
-	function getSubjects($school_year) {
+	function getSubjects($school_year="") {
 		global $db;
 		$query = "SELECT * FROM subjects ORDER BY name";
 		if (!empty($school_year)) {
@@ -136,7 +137,7 @@
 		return $subjects;
 	}
 
-	function getTeachers($subject_id) {
+	function getTeachers($subject_id="") {
 		global $db;
 		$query = "SELECT * FROM teachers ORDER BY name";
 		if (!empty($subject_id)) {

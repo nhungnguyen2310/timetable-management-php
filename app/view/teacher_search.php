@@ -17,6 +17,8 @@
 			<div class="logout">
 				<input class="button_logout" name="logout" type="submit" value="Đăng xuất">
 			</div>
+		</form>
+		<form action="" method="GET">
 			<div class="form">
 				<div class="form_item">
 					<div class="form_item_title">
@@ -42,13 +44,29 @@
 					</div>
 					<input type="text" class="form_item_input" name="keyword" placeholder="Nhập từ khóa">
 				</div>
-				<div>
-					<input class="button" name="search" type="submit" value="Tìm kiếm">
+				<div class="form_item">
+					<button class="button" name="search" type="submit" value="true"><?php echo "Tìm kiếm"?></button>
 				</div>
 			</div>
-		
+		</form>
+		<form action="" method="POST">
+			<?php
+				$_subject = "";
+				$_keyword = "";
+				if (isset($_GET["search"])) {
+					if ($_GET["subject_id"] != 0) {
+						$_subject = $subjects[$_GET["subject_id"]];
+					}
+					if (!empty($_GET["keyword"])) {
+						$_keyword = $_GET["keyword"];
+					}
+				}
+				$data = getTeachers($_subject, $_keyword);
+				$count = $data[0];
+				$teachers = $data[1];
+			?>
 			<div class="information">
-				<span><?php echo "Số giáo viên tìm thấy: " . count($teachers) . ""?></span>
+				<span><?php echo "Số giáo viên tìm thấy: " . $count . ""?></span>
 			</div>
 			<div class="details">
 				<table>
@@ -72,7 +90,7 @@
 								echo "<td>" . $teacher["degree"] . "</td>";
 								echo "<td>" . getSubjectName($teacher["subject_id"]) . "</td>";
 								echo "<td>" . $teacher["description"] . "</td>";
-								echo "<td><div><input class='button' name='delete_" . $i . "' type='submit' value='Xóa'><input class='button' name='edit_" . $i . "' type='submit' value='Sửa'></div></td>"; 
+								echo "<td><div class='buttons2'><button class='button' name='delete_" . $i . "' type='submit' value='Xóa' onclick='return confirm(`Bạn chắc chắn muốn xóa thông tin giáo viên " . $teacher["name"] . "?`)'>Xóa</button><button class='button' name='edit_" . $i . "' type='submit' value='Sửa'>Sửa</button></div></td>"; 
 								echo "</tr>";
 							}
 						} else {
@@ -89,7 +107,7 @@
 					?>
 				</table>
 			</div>
-			<div>
+			<div class="form_item">
 				<input class="button" name="home" type="submit" value="Trở về trang chủ">
 			</div>
 		</form>

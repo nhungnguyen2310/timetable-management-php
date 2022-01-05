@@ -32,7 +32,12 @@
 							echo "<tr>";
 							echo "<td class='no'>" . $i+1 . "</td>";
 							echo "<td class='name'>" . $user['login_id'] . "</td>";
-							echo "<td class='pass'><input type='password' name='new_password_" . $i . "' class='input' maxlength='64' placeholder='Mật khẩu mới' id='password'></td>";
+							echo "<td class='pass'>";
+							if (!empty($error)) {
+								echo "<div style='color: red' id='span'>" . $error . "</div>";
+							}
+							echo "<input type='password' name='new_password_" . $i . "' class='input' maxlength='64' placeholder='Mật khẩu mới' id='password'>";
+							echo "</td>";
 							echo "<td class='btn'><div><input class='button_reset' name='reset_password_" . $i . "' type='submit' value='Reset'></div></td>";
 							echo "</tr>";
 						}

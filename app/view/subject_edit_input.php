@@ -18,28 +18,42 @@
 			<div class="form_title">
 				<span><?php echo "CHỈNH SỬA THÔNG TIN MÔN HỌC"?></span>
 			</div>
-			<div class="form_error">
+			<div class="form_error_">
 				<?php
-					if (!empty($error)) {
-						echo '<span class="error">' . $error . '</span>';
+					if (isset($errors["duplicate"])) {
+						echo '<span class="error">' . $errors["duplicate"] . '</span>';
 					}
 				?>
 			</div>
 			<div class="form">
+				<div class="form_error_">
+					<?php
+						if (isset($errors["name"])) {
+							echo '<span class="error">' . $errors["name"] . '</span>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Tên môn học"?></label>
 					</div>
-					<input class="form_item_input" name="new_name" placeholder="Nhập tên môn học" maxlength="250" value="<?php echo $subject['name']?>">
+					<input class="form_item_input" name="new_name" placeholder="Nhập tên môn học" maxlength="100" value="<?php echo $name?>">
+				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["school_year"])) {
+							echo '<span class="error">' . $errors["school_year"] . '</span>';
+						}
+					?>
 				</div>
 				<div class="form_item">
 					<div class="form_item_title">
-						<label class="label"><?php echo "Khóa"?></label>
+						<label class="label"><?php echo "Năm học"?></label>
 					</div>
 					<select class="select_box" name="new_school_year">
 						<?php
 							$years = array("--Chọn năm học--", "Năm 1", "Năm 2", "Năm 3", "Năm 4");
-							$year = substr($subject["school_year"], 4);
+							$year = substr($school_year, 4);
 							$chose = "";
 							foreach ($years as $key => $value) {
 								if (isset($year) && ($year == $key)) {
@@ -52,11 +66,18 @@
 						?>
 					</select>
 				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["description"])) {
+							echo '<span class="error">' . $errors["description"] . '</span>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Mô tả chi tiết"?></label>
 					</div>
-					<input class="form_item_input" name="new_description" placeholder="Nhập mô tả chi tiết" value="<?php if (!empty($subject['description'])) { echo $subject['description']; }?>">
+					<textarea class="form_item_textarea" name="new_description" placeholder="Nhập mô tả chi tiết" maxlength="1000"><?php echo $description?></textarea>
 				</div>
 			</div>
 			<div class="buttons">

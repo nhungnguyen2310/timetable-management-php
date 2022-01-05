@@ -13,14 +13,16 @@
 
 <body>
 	<div class="container">
-		<form action="" method="POST" id="form">
+		<form action="" method="POST">
 			<div class="logout">
 				<input class="button_logout" name="logout" type="submit" value="Đăng xuất">
 			</div>
+		</form>
+		<form action="" method="GET">
 			<div class="form">
 				<div class="form_item">
 					<div class="form_item_title">
-						<label class="label"><?php echo "Khóa"?></label>
+						<label class="label"><?php echo "Năm học"?></label>
 					</div>
 					<select class="select_box" name="school_year">
 						<?php
@@ -57,23 +59,55 @@
 				</div>
 				<div class="form_item">
 					<div class="form_item_title">
-						<label class="label"><?php echo "Từ khóa"?></label>
+						<label class="label"><?php echo "Giáo viên"?></label>
 					</div>
-					<input type="text" id="search" class="form_item_input" name="keyword" placeholder="Nhập từ khóa">
+					<select class="select_box" name="teacher">
+						<?php
+							$chose = "";
+							foreach ($teachers as $key => $value) {
+								if (isset($teacher) && ($teacher == $key)) {
+									$chose = "selected";
+								} else {
+									$chose = "";
+								}
+								echo '<option value=' . $key . ' ' . $chose . '>' . $value . '</option>';
+							}
+						?>
+					</select>
 				</div>
-				<div>
-					<input class="button" name="search" id="search_button" type="submit" value="Tìm kiếm">
+				<div class="form_item">
+					<button class="button" name="search" id="search_button" type="submit" value="true"><?php echo "Tìm kiếm"?></button>
 				</div>
 			</div>
-		
+		</form>
+		<form action="" method="POST">
+			<?php
+				$_school_year = "";
+				$_subject = "";
+				$_teacher = "";
+				if (isset($_GET["search"])) {
+					if ($_GET["school_year"] != 0) {
+						$_school_year = $years[$_GET["school_year"]];
+					}
+					if ($_GET["subject"] != 0) {
+						$_subject = $subjects[$_GET["subject"]];
+					}
+					if ($_GET["teacher"] != 0) {
+						$_teacher = $teachers[$_GET["teacher"]];
+					}
+				}
+				$data = getSchedules($_school_year, $_subject, $_teacher);
+				$count = $data[0];
+				$schedules = $data[1];
+			?>
 			<div class="information">
-				<span><?php echo "Số lớp học tìm thấy: " . count($schedules) . ""?></span>
+				<span><?php echo "Số lớp học tìm thấy: " . $count . ""?></span>
 			</div>
 			<div class="details">
 				<table>
 					<tr>
 						<th><?php echo "No."?></th>
-						<th><?php echo "Khóa"?></th>
+						<th><?php echo "Năm học"?></th>
 						<th><?php echo "Môn học"?></th>
 						<th><?php echo "Giáo viên"?></th>
 						<th><?php echo "Thứ"?></th>
@@ -93,7 +127,7 @@
 								echo "<td>" . $schedule["weekday"] . "</td>";
 								echo "<td>" . $schedule["lesson"] . "</td>";
 								echo "<td>" . $schedule["notes"] . "</td>";
-								echo "<td><div><input class='button' name='delete_" . $i . "' type='submit' value='Xóa'><input class='button' name='edit_" . $i . "' type='submit' value='Sửa'></div></td>"; 
+								echo "<td><div class='buttons2'><button class='button' name='delete_" . $i . "' type='submit' value='Xóa' onclick='return confirm(`Bạn chắc chắn muốn xóa thông tin lớp học?`)'>Xóa</button><button class='button' name='edit_" . $i . "' type='submit' value='Sửa'>Sửa</button></div></td>"; 
 								echo "</tr>";
 							}
 						} else {
@@ -111,8 +145,8 @@
 					?>
 				</table>
 			</div>
-			<div>
-				<input class="button" name="home" type="submit" value="Trở về trang chủ">
+			<div class="form_item">
+				<button class="button" name="home" type="submit" value="Trở về trang chủ"><?php echo "Trở về trang chủ"?></button>
 			</div>
 		</form>
 	</div>

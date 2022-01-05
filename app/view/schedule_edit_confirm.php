@@ -20,10 +20,10 @@
 			<div class="form">
 				<div class="form_item">
 					<div class="form_item_title">
-						<label class="label"><?php echo "Khóa"?></label>
+						<label class="label"><?php echo "Năm học"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo $new_school_year?></span>
+						<span><?php echo $school_year?></span>
 					</div>
 				</div>
 				<div class="form_item">
@@ -31,7 +31,7 @@
 						<label class="label"><?php echo "Môn học"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo getSubjectName($new_subject_id)?></span>
+						<span><?php echo getSubjectName($subject_id)?></span>
 					</div>
 				</div>
 				<div class="form_item">
@@ -39,7 +39,7 @@
 						<label class="label"><?php echo "Giáo viên"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo getTeacherName($new_teacher_id)?></span>
+						<span><?php echo getTeacherName($teacher_id)?></span>
 					</div>
 				</div>
 				<div class="form_item">
@@ -47,7 +47,7 @@
 						<label class="label"><?php echo "Thứ"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo $new_weekday?></span>
+						<span><?php echo $weekday?></span>
 					</div>
 				</div>
 				<div class="form_item">
@@ -55,7 +55,7 @@
 						<label class="label"><?php echo "Tiết"?></label>
 					</div>
 					<div class="form_item_table">
-						<span><?php echo $new_lesson?></span>	
+						<span><?php echo $lesson?></span>	
 					</div>
 				</div>
 				<div class="form_item">
@@ -63,12 +63,12 @@
 						<label class="label"><?php echo "Ghi chú"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo $new_notes?></span>
+						<span><?php echo $notes?></span>
 					</div>
 				</div>
 			</div>
 			<div class="buttons">
-				<input class="button" name="back" type="submit" value="Quay lại">
+				<input class="button" name="back_edit" type="submit" value="Sửa lại">
 				<input class="button" name="edit_confirm" type="submit" value="Xác nhận">
 			</div>
 		</form>

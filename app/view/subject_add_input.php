@@ -14,34 +14,46 @@
 
 <body>
 	<div class="container">
-		<form action="" method="POST" enctype="multipart/form-data">
+		<form action="" method="POST">
 			<div class="form_title">
 				<span><?php echo "THÊM THÔNG TIN MÔN HỌC"?></span>
 			</div>
 			<div class="form_error">
 				<?php
-					if (isset($errors)) {
-						foreach ($errors as $key => $value) {
-							echo '<span class="error">' . $value . '</span>';
-							echo '<br>';
-						}
+					if (isset($errors["duplicate"])) {
+						echo '<span class="error">' . $errors["duplicate"] . '</span>';
 					}
 				?>
 			</div>
 			<div class="form">
+				<div class="form_error">
+					<?php
+						if (isset($errors["name"])) {
+							echo '<span class="error">' . $errors["name"] . '</span>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Tên môn học"?></label>
 					</div>
-					<input class="form_item_input" name="add_name" placeholder="Nhập tên môn học" value="<?php if (isset($name) && !isset($errors["duplicate"])) { echo $name; }?>">
+					<input class="form_item_input" name="add_name" placeholder="Nhập tên môn học" maxlength="100" value="<?php if (isset($name) && !isset($errors["duplicate"])) { echo $name; }?>">
+				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["school_year"])) {
+							echo '<span class="error">' . $errors["school_year"] . '</span>';
+						}
+					?>
 				</div>
 				<div class="form_item">
 					<div class="form_item_title">
-						<label class="label"><?php echo "Khóa"?></label>
+						<label class="label"><?php echo "Năm học"?></label>
 					</div>
 					<select class="select_box" name="add_school_year">
 						<?php
 							$years = array("--Chọn năm học--", "Năm 1", "Năm 2", "Năm 3", "Năm 4");
+							$year = substr($school_year, 4);
 							$chose = "";
 							foreach ($years as $key => $value) {
 								if (isset($year) && ($year == $key) && !isset($errors["duplicate"])) {
@@ -54,11 +66,18 @@
 						?>
 					</select>
 				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["description"])) {
+							echo '<span class="error">' . $errors["description"] . '</span>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Mô tả chi tiết"?></label>
 					</div>
-					<input class="form_item_input" name="add_description" placeholder="Nhập mô tả chi tiết" value="<?php if (isset($description) && !isset($errors["duplicate"])) { echo $description; }?>">
+					<textarea class="form_item_textarea" name="add_description" placeholder="Nhập mô tả chi tiết" maxlength="1000"><?php if (isset($description) && !isset($errors["duplicate"])) { echo $description; }?></textarea>
 				</div>
 			</div>
 			<div class="buttons">

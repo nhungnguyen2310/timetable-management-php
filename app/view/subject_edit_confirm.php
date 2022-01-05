@@ -23,15 +23,15 @@
 						<label class="label"><?php echo "Tên môn học"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo $new_name?></span>
+						<span><?php echo $name?></span>
 					</div>
 				</div>
 				<div class="form_item">
 					<div class="form_item_title">
-						<label class="label"><?php echo "Khóa"?></label>
+						<label class="label"><?php echo "Năm học"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo $new_school_year?></span>
+						<span><?php echo $school_year?></span>
 					</div>
 				</div>
 				<div class="form_item">
@@ -39,12 +39,12 @@
 						<label class="label"><?php echo "Mô tả chi tiết"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo $new_description?></span>
+						<span><?php echo $description?></span>
 					</div>
 				</div>
 			</div>
 			<div class="buttons">
-				<input class="button" name="back" type="submit" value="Quay lại">
+				<input class="button" name="back_edit" type="submit" value="Sửa lại">
 				<input class="button" name="edit_confirm" type="submit" value="Xác nhận">
 			</div>
 		</form>

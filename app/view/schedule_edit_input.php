@@ -46,17 +46,24 @@
 			<div class="form_title">
 				<span><?php echo "CHỈNH SỬA THÔNG TIN LỚP HỌC"?></span>
 			</div>
-			<div class="form_error">
+			<div class="form_error_">
 				<?php
-					if (!empty($error)) {
-						echo '<span class="error">' . $error . '</span>';
+					if (isset($errors["duplicate"])) {
+						echo '<span class="error">' . $errors["duplicate"] . '</span>';
 					}
 				?>
 			</div>
 			<div class="form">
+				<div class="form_error">
+					<?php
+						if (isset($errors["school_year"])) {
+							echo '<span class="error">' . $errors["school_year"] . '</span>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
-						<label class="label"><?php echo "Khóa"?></label>
+						<label class="label"><?php echo "Năm học"?></label>
 					</div>
 					<select class="select_box" name="new_school_year" onchange="reload(this.form)">
 						<?php
@@ -73,6 +80,13 @@
 							}
 						?>
 					</select>
+				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["subject"])) {
+							echo '<span class="error">' . $errors["subject"] . '</span>';
+						}
+					?>
 				</div>
 				<div class="form_item">
 					<div class="form_item_title">
@@ -94,6 +108,13 @@
 						?>
 					</select>
 				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["teacher"])) {
+							echo '<span class="error">' . $errors["teacher"] . '</span>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Giáo viên"?></label>
@@ -114,6 +135,13 @@
 						?>
 					</select>
 				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["weekday"])) {
+							echo '<span class="error">' . $errors["weekday"] . '</span>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Thứ"?></label>
@@ -133,6 +161,13 @@
 							}
 						?>
 					</select>
+				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["lesson"])) {
+							echo '<span class="error">' . $errors["lesson"] . '</span>';
+						}
+					?>
 				</div>
 				<div class="form_item">
 					<div class="form_item_title">
@@ -163,11 +198,18 @@
 						</table>
 					</div>
 				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["notes"])) {
+							echo '<span class="error">' . $errors["notes"] . '</span>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Ghi chú"?></label>
 					</div>
-					<input class="form_item_input" name="new_notes" placeholder="Nhập ghi chú" value="<?php if (isset($notes)) { echo $notes; }?>">
+					<textarea class="form_item_textarea" name="new_notes" placeholder="Nhập ghi chú" maxlength="1000"><?php echo $schedule["notes"]?></textarea>
 				</div>
 			</div>
 			</div>

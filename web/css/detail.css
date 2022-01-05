@@ -24,6 +24,12 @@ form {
 }
 
 .form_error {
+	width: 100%;
+	text-align: right;
+	color: red;
+}
+
+.form_error_ {
 	color: red;
 }
 
@@ -47,7 +53,7 @@ form {
 	margin: 10px 0;
 }
 
-.form_item_input, .form_item_button {
+.form_item_input, .form_item_button, .form_item_textarea {
 	font-size: 20px;
 	border: 1px solid #43729d;
 }
@@ -73,11 +79,15 @@ form {
 	text-overflow: ellipsis;
 }
 
-.form_item_input {
+.form_item_input, .form_item_textarea {
 	display: flex;
 	padding-left: 10px;
 	background-color: #e0eeff;
 	width: 70%;
+}
+
+.form_item_textarea {
+	height: 200px;
 }
 
 input[type="file"] {

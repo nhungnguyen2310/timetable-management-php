@@ -23,7 +23,7 @@
 						<label class="label"><?php echo "Tên giáo viên"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo $new_name?></span>
+						<span><?php echo $name?></span>
 					</div>
 				</div>
 				<div class="form_item">
@@ -31,7 +31,7 @@
 						<label class="label"><?php echo "Chuyên ngành"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo getSubjectName($new_subject_id)?></span>
+						<span><?php echo getSubjectName($subject_id)?></span>
 					</div>
 				</div>
 				<div class="form_item">
@@ -39,15 +39,7 @@
 						<label class="label"><?php echo "Học vị"?></label>
 					</div>
 					<div class="form_item_information">
-						<span><?php echo $new_degree?></span>
-					</div>
-				</div>
-				<div class="form_item">
-					<div class="form_item_title">
-						<label class="label"><?php echo "Mô tả chi tiết"?></label>
-					</div>
-					<div class="form_item_information">
-						<span><?php echo $new_description?></span>
+						<span><?php echo $degree?></span>
 					</div>
 				</div>
 				<div class="form_item">
@@ -55,12 +47,20 @@
 						<label class="label"><?php echo "Ảnh đại diện"?></label>
 					</div>
 					<div class="form_item_avatar">
-						<img src="<?php echo '../../web/avatar/' . $new_avatar . ''?>">
+						<img src="<?php echo '../../web/avatar/tmp/' . $avatar . ''?>">
+					</div>
+				</div>
+				<div class="form_item">
+					<div class="form_item_title">
+						<label class="label"><?php echo "Mô tả chi tiết"?></label>
+					</div>
+					<div class="form_item_information">
+						<span><?php echo $description?></span>
 					</div>
 				</div>
 			</div>
 			<div class="buttons">
-				<input class="button" name="back" type="submit" value="Quay lại">
+				<input class="button" name="back_edit" type="submit" value="Sửa lại">
 				<input class="button" name="edit_confirm" type="submit" value="Xác nhận">
 			</div>
 		</form>

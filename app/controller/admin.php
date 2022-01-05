@@ -16,7 +16,7 @@
 	}
 
 	$error = "";
-	$data = getUser();
+	$data = getUsers();
 	$count = $data[0];
 	$users = $data[1];
 
@@ -25,26 +25,22 @@
 			if (isset($_POST["reset_password_" . $i . ""])) {
 				if (empty($_POST["new_password_" . $i . ""])) {
 					$error = "Hãy nhập mật khẩu mới!";
-					alert($error);
-					header("Refresh:0");
+					include '../view/admin.php';
 				} else {
-					$password = $_POST["new_password_" . $i . ""];
+					$password = format($_POST["new_password_" . $i . ""]);
 					if (strlen($password) < 6) {
 						$error = "Hãy nhập mật khẩu mới có ít nhất 6 ký tự!";
-						alert($error);
-						header("Refresh:0");
+						include '../view/admin.php';
 					} else {
 						$user = $users[$i];
 						$username = $user['login_id'];
 						resetPassword($username, $password);
-						$alert = "Thay đổi mật khẩu cho người dùng " . $username . " thành công!";
-						alert($alert);
 						header("Refresh:0");
 					}
 				}
 			}
 		}
 	} else {
-		include_once '../view/admin.php';
+		include '../view/admin.php';
 	}
 ?>

@@ -55,12 +55,12 @@
 						<label class="label"><?php echo "Ảnh đại diện"?></label>
 					</div>
 					<div class="form_item_avatar">
-						<img src="<?php echo '../../web/avatar/' . $avatar . ''?>">
+						<img src="<?php echo '../../web/avatar/tmp/' . $avatar . ''?>">
 					</div>
 				</div>
 			</div>
 			<div class="buttons">
-				<input class="button" name="home" type="submit" value="Quay lại">
+				<input class="button" name="back_add" type="submit" value="Sửa lại">
 				<input class="button" name="add_confirm" type="submit" value="Xác nhận">
 			</div>
 		</form>

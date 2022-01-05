@@ -1,7 +1,7 @@
 <?php
-	function getUser() {
+	function getUsers() {
 		global $db;
-		$query = "SELECT * FROM admins WHERE reset_password_token IS NOT NULL ORDER BY login_id";
+		$query = "SELECT * FROM admins WHERE reset_password_token IS NOT NULL ORDER BY reset_password_token";
 		$statement = $db->prepare($query);
 		$statement->execute();
 		$count = $statement->rowCount();

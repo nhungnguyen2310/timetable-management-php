@@ -22,17 +22,14 @@
 				$count = $statement->rowCount();
 				if ($count > 0) {
 					request_reset($username);
-					include_once "../view/resetpassword_confirm.php";
+					$username = $_SESSION["username"];
+					include_once "../view/resetpassword_complete.php";
 				} else {
-					$error = "Tên tài khoản không đúng!";
+					$error = "Tên tài khoản không tồn tại!";
 					include "../view/resetpassword_input.php";
 					$error = "";
 				}
 			}
-		} elseif (isset($_POST["reset_confirm"])) {
-			$username = $_SESSION["username"];
-			include_once "../view/resetpassword_complete.php";
-			unset($_SESSION["username"]);
 		} elseif (isset($_POST["home"]) || isset($_POST["back"])) {
 			unset($_SESSION["username"]);
 			redirect("../../login.php");

@@ -19,109 +19,125 @@
 	$count = $data[0];
 	$teachers = $data[1];
 	$subjects = getSubjects();
+	$degrees = array("--Chọn học vị--", "Cử nhân", "Thạc sĩ", "Tiến sĩ", "Phó giáo sư", "Giáo sư");
 
 	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		if (isset($_POST["search"])) {
-			$keyword = $_POST['keyword'];
-			if ($_POST['subject_id'] != 0) {
-				$subject_id = $subjects[$_POST['subject_id']];
-				$data = search($keyword, $subject_id);
-			} else {
-				$data = search($keyword);
-			}
-			$count = $data[0];
-			$teachers = $data[1];
-			include_once '../view/teacher_search.php';
-		} elseif (isset($_POST["back"])) {
+		if (isset($_POST["back"])) {
 			if (isset($_SESSION['add_teacher'])) {
 				unset($_SESSION['add_teacher']);
 			}
+			clean();
 			include_once '../view/teacher_search.php';
 		} elseif (isset($_POST["home"])) {
 			if (isset($_SESSION['add_teacher'])) {
 				unset($_SESSION['add_teacher']);
 			}
+			clean();
 			redirect("../../home.php");
-		} elseif (isset($_POST["delete_confirm"])) {
-			$teacher = $_SESSION['teacher_deleting'];
-			$id = $teacher['id'];
-			deleteTeacher($id);
-			include_once '../view/teacher_delete_complete.php';
-			unset($_SESSION['teacher_deleting']);
+		}  elseif (isset($_POST["back_edit"])) {
+			$teacher = $_SESSION['teacher_edited'];
+			$name = $teacher["name"];
+			$subject = getSubjectName($teacher["subject_id"]);
+			$degree = $teacher["degree"];
+			$avatar = $teacher["avatar"];
+			$description = $teacher["description"];
+			include '../view/teacher_edit_input.php';
 		} elseif (isset($_POST["edit_submit"])) {
-			$error = "";
+			$errors = array();
 			$teacher = $_SESSION['teacher_editing'];
+			$avatar = $teacher["avatar"];
+			$subject = getSubjectName($teacher["subject_id"]);
 			if (empty($_POST["new_name"])) {
-				$new_name = $teacher["name"];
+				$errors["name"] = "Hãy nhập tên giáo viên!";
+				$name = "";
 			} else {
-				$new_name = $_POST["new_name"];
+				$name = format($_POST["new_name"]);
 			}
 			if (empty($_POST["new_subject_id"])) {
-				$new_subject_id = $teacher["subject_id"];
+				$errors["subject"] = "Hãy chọn chuyên ngành!";
+				$subject = 0;
+				$subject_id = -1;
 			} else {
-				$new_subject_id = getSubjectID($subjects[$_POST["new_subject_id"]]);
+				$subject_id = getSubjectID($subjects[$_POST["new_subject_id"]]);
 			}
 			if (empty($_POST["new_degree"])) {
-				$new_degree = $teacher["degree"];
+				$errors["degree"] = "Hãy chọn học vị!";
+				$degree = "";
 			} else {
-				$new_degree = $_POST["new_degree"];
+				$degree = $degrees[$_POST["new_degree"]];
 			}
-			if ($_FILES["new_avatar"]['size'] == 0) {
-				$new_avatar = $teacher["avatar"];
-			} else {
+			if ($_FILES["new_avatar"]['size'] != 0) {
 				$extension = explode(".", $_FILES["new_avatar"]["name"])[1];
-				$new_avatar = $new_name . "." . $extension;
+				$avatar = $name . "." . $extension;
 			}
-			$new_description = $_POST["new_description"];
-			if (check($new_name, $new_description, $new_subject_id, $new_degree)) {
-				if (!($_FILES["new_avatar"]['size'] != 0 && $new_name == $teacher["name"] && $new_subject_id == $teacher["subject_id"] && $new_degree == $teacher["degree"] && $new_description == $teacher["description"])) {
-					console_log("Yes");
-					$error = "Giáo viên đã tồn tại!";
-				}
+			if (empty($_POST["new_description"])) {
+				$errors["description"] = "Hãy nhập mô tả chi tiết!";
+				$description = "";
+			} else {
+				$description = format($_POST["new_description"]);
 			}
-			if (!empty($error)) {
-				$teacher = $_SESSION['teacher_editing'];
+			if (check($name, $description, $subject_id, $degree)) {
+				$errors["duplicate"] = "Giáo viên đã tồn tại!";
+			}
+			if (count($errors) > 0) {
 				include '../view/teacher_edit_input.php';
 			} else {
-				if ($new_avatar != $teacher["avatar"]) {
-					saveAvatar("new_avatar", $teacher["avatar"], $new_avatar);
+				if ($_FILES["new_avatar"]['size'] == 0) {
+					copy("../../web/avatar/" . $avatar, "../../web/avatar/tmp/" . $avatar);
+				} else {
+					saveTempAvatar("new_avatar", $avatar);
 				}
-				$_SESSION['teacher_edited'] = array($new_name, $new_avatar, $new_description, $new_subject_id, $new_degree);
+				$_SESSION['teacher_edited'] = array("name" => $name, "avatar" => $avatar, "description" => $description, "subject_id" => $subject_id, "degree" => $degree);
 				include_once '../view/teacher_edit_confirm.php';
 			}
 		} elseif (isset($_POST["edit_confirm"])) {
 			$teacher = $_SESSION['teacher_editing'];
-			$new = $_SESSION['teacher_edited'];
-			editTeacher($teacher["id"], $new[0], $new[1], $new[2], $new[3], $new[4]);
+			$edited = $_SESSION['teacher_edited'];
+			saveAvatar($teacher["avatar"], $edited["avatar"]);
+			editTeacher($teacher["id"], $edited["name"], $edited["avatar"], $edited["description"], $edited["subject_id"], $edited["degree"]);
 			include_once '../view/teacher_edit_complete.php';
 			unset($_SESSION['teacher_editing']);
 			unset($_SESSION['teacher_edited']);
+		} elseif (isset($_POST["back_add"])) {
+			$teacher = $_SESSION['teacher_adding'];
+			$name = $teacher["name"];
+			$subject_id = $teacher["subject_id"];
+			$degree = $teacher["degree"];
+			$description = $teacher["description"];
+			$avatar = $teacher["avatar"];
+			include '../view/teacher_add_input.php';
 		} elseif (isset($_POST['add_submit'])) {
 			$errors = array();
-			$name = "";
-			$subject_id = "";
-			$degree = "";
 			if (empty($_POST["add_name"])) {
 				$errors["name"] = "Hãy nhập tên giáo viên!";
+				$name = "";
 			} else {
-				$name = $_POST["add_name"];
+				$name = format($_POST["add_name"]);
 			}
 			if (empty($_POST["add_subject_id"])) {
 				$errors["subject_id"] = "Hãy chọn chuyên ngành!";
+				$subject_id = -1;
 			} else {
 				$subject_id = getSubjectID($subjects[$_POST["add_subject_id"]]);
 			}
 			if (empty($_POST["add_degree"])) {
-				$errors["degree"] = "Hãy nhập học vị!";
+				$errors["degree"] = "Hãy chọn học vị!";
+				$degree = "";
 			} else {
-				$degree = $_POST["add_degree"];
+				$degree = $degrees[$_POST["add_degree"]];
 			}
-			$description = $_POST["add_description"];
+			if (empty($_POST["add_description"])) {
+				$errors["description"] = "Hãy nhập mô tả chi tiết!";
+				$description = "";
+			} else {
+				$description = format($_POST["add_description"]);
+			}
 			if ($_FILES["add_avatar"]['size'] == 0) {
-				$avatar = "temp.jpg";
+				$errors["avatar"] = "Hãy chọn ảnh đại diện!";
+				$avatar = "";
 			} else {
 				$avatar = $name . "." . explode(".", $_FILES["add_avatar"]["name"])[1];
-				saveAvatar("add_avatar", "temp.jpg", $avatar);
+				saveTempAvatar("add_avatar", $avatar);
 			}
 			if (check($name, $avatar, $description, $subject_id, $degree)) {
 				$errors["duplicate"] = "Giáo viên đã tồn tại!";
@@ -129,23 +145,29 @@
 			if (count($errors) > 0) {
 				include '../view/teacher_add_input.php';
 			} else {
-				$_SESSION['teacher_adding'] = array($name, $avatar, $description, $subject_id, $degree);
+				$_SESSION['teacher_adding'] = array("name" => $name, "avatar" => $avatar, "description" => $description, "subject_id" => $subject_id, "degree" => $degree);
 				include '../view/teacher_add_confirm.php';
 				unset($_SESSION['add_teacher']);
 			}
 		} elseif (isset($_POST['add_confirm'])) {
 			$teacher = $_SESSION['teacher_adding'];
-			addTeacher($teacher[0], $teacher[1], $teacher[2], $teacher[3], $teacher[4]);
+			saveAvatar("temp.jpg", $teacher["avatar"]);
+			addTeacher($teacher["name"], $teacher["avatar"], $teacher["description"], $teacher["subject_id"], $teacher["degree"]);
 			include '../view/teacher_add_complete.php';
 			unset($_SESSION['teacher_adding']);
 		} else {
 			for ($i = 0; $i < $count; $i++) {
 				$teacher = $teachers[$i];
 				if (isset($_POST["delete_" . $i . ""])) {
-					$_SESSION['teacher_deleting'] = $teacher;
-					include_once "../view/teacher_delete_confirm.php";
+					deleteTeacher($teacher["id"]);
+					header("Refresh:0");
 				} elseif (isset($_POST["edit_" . $i . ""])) {
 					$_SESSION['teacher_editing'] = $teacher;
+					$name = $teacher["name"];
+					$subject = getSubjectName($teacher["subject_id"]);
+					$degree = $teacher["degree"];
+					$avatar = $teacher["avatar"];
+					$description = $teacher["description"];
 					include_once "../view/teacher_edit_input.php";
 				}
 			}
