@@ -34,22 +34,29 @@
 				}
 			}
 		}
+		$query2 = "SELECT * FROM subjects WHERE id = '$subject_id'";
+		$statement2 = $db->prepare($query2);
+		$statement2->execute();
+		foreach ($statement2 as $subject) {
+			if ($subject["avatar"] != "temp.jpg") {
+				unlink("../../web/avatar/subject/" . $subject["avatar"]);
+			}
+		}
 		$query = "DELETE FROM subjects WHERE id = '$subject_id'";
 		$statement = $db->prepare($query);
 		$statement->execute();
-		
 	}
 
-	function editSubject($subject_id, $name, $description, $school_year) {
+	function editSubject($subject_id, $avatar, $name, $description, $school_year) {
 		global $db;
-		$query = "UPDATE subjects SET name = '$name', description = '$description', school_year = '$school_year', updated = current_timestamp() WHERE id = '$subject_id'";
+		$query = "UPDATE subjects SET avatar = '$avatar', name = '$name', description = '$description', school_year = '$school_year', updated = current_timestamp() WHERE id = '$subject_id'";
 		$statement = $db->prepare($query);
 		$statement->execute();
 	}
 
-	function addSubject($name, $description, $school_year) {
+	function addSubject($name, $avatar, $description, $school_year) {
 		global $db;
-		$query = "INSERT INTO subjects (name, description, school_year) VALUES ('$name', '$description', '$school_year')";
+		$query = "INSERT INTO subjects (name, avatar, description, school_year) VALUES ('$name', '$avatar', '$description', '$school_year')";
 		$statement = $db->prepare($query);
 		$statement->execute();
 	}

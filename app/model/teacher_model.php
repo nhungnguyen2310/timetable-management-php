@@ -28,7 +28,7 @@
 		$statement2->execute();
 		foreach ($statement2 as $teacher) {
 			if ($teacher["avatar"] != "temp.jpg") {
-				unlink("../../web/avatar/" . $teacher["avatar"]);
+				unlink("../../web/avatar/teacher/" . $teacher["avatar"]);
 			}
 		}
 		$query = "DELETE FROM teachers WHERE id = '$teacher_id'";

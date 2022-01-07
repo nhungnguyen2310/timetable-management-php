@@ -73,6 +73,7 @@
 				<table>
 					<tr>
 						<th><?php echo "No."?></th>
+						<th class="th_avatar"><?php echo "Ảnh đại diện"?></th>
 						<th><?php echo "Tên môn học"?></th>
 						<th><?php echo "Năm học"?></th>
 						<th><?php echo "Mô tả chi tiết"?></th>
@@ -84,6 +85,7 @@
 								$subject = $subjects[$i];
 								echo "<tr>";
 								echo "<td>" . $i+1 . "</td>";
+								echo "<td class='td_avatar'><img src='../../web/avatar/subject/" . $subject["avatar"] . "''></td>";
 								echo "<td>" . $subject["name"] . "</td>";
 								echo "<td>" . $subject["school_year"] . "</td>";
 								echo "<td>" . $subject["description"] . "</td>";

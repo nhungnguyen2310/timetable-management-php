@@ -111,10 +111,10 @@
 							?>
 						</div>
 						<div class="form_item_file" id="browse">
-							<div class="form_item_filename" id="filename"><?php if (str_contains($avt, "tmp")) { echo explode("/", $avt)[1]; } ?></div>
+							<div class="form_item_filename" id="filename"></div>
 							<div class="form_item_button">
-								<label class="form_item_upload" for="_avatar"><?php echo "Browse"?></label>
-								<input type="file" id="_avatar" name="add_avatar" accept="image/*"/>
+								<label class="form_item_upload" for="avatar"><?php echo "Browse"?></label>
+								<input type="file" id="avatar" name="add_avatar" accept="image/*"/>
 							</div>
 						</div>
 					</div>
@@ -142,9 +142,9 @@
 </body>
 
 <script>
-	$('#_avatar').change(function() {
+	$('#avatar').change(function() {
 		var i = $(this).prev('label').clone();
-		var file = $('#_avatar')[0].files[0].name;
+		var file = $('#avatar')[0].files[0].name;
 		document.getElementById("filename").innerHTML = file;
 		document.getElementById("add_avatar").src = window.URL.createObjectURL(this.files[0]);
 	});

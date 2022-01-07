@@ -79,6 +79,30 @@
 					</div>
 					<textarea class="form_item_textarea" name="new_description" placeholder="Nhập mô tả chi tiết" maxlength="1000"><?php echo $description?></textarea>
 				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["avatar"])) {
+							echo '<span class="error">' . $errors["avatar"] . '</span>';
+						}
+					?>
+				</div>
+				<div class="form_item">
+					<div class="form_item_title">
+						<label class="label"><?php echo "Ảnh đại diện"?></label>
+					</div>
+					<div class="form_item_image">
+						<div class="form_item_avatar">
+							<img id="new_avatar" src="<?php echo '../../web/avatar/subject/' . $avatar?>">
+						</div>
+						<div class="form_item_file" id="browse">
+							<div class="form_item_filename" id="filename"></div>
+							<div class="form_item_button">
+								<label class="form_item_upload" for="avatar"><?php echo "Browse"?></label>
+								<input type="file" id="avatar" name="new_avatar" accept="image/*"/>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="buttons">
 				<input class="button" name="back" type="submit" value="Quay lại">
@@ -87,4 +111,14 @@
 		</form>
 	</div>
 </body>
+
+<script>
+	$('#avatar').change(function() {
+		var i = $(this).prev('label').clone();
+		var file = $('#avatar')[0].files[0].name;
+		document.getElementById("filename").innerHTML = file;
+		document.getElementById("new_avatar").src = window.URL.createObjectURL(this.files[0]);
+		console.log(window.URL.createObjectURL(this.files[0]));
+	});
+</script>
 </html>

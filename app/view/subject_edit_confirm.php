@@ -42,6 +42,14 @@
 						<span><?php echo $description?></span>
 					</div>
 				</div>
+				<div class="form_item">
+					<div class="form_item_title">
+						<label class="label"><?php echo "Ảnh đại diện"?></label>
+					</div>
+					<div class="form_item_avatar">
+						<img src="<?php echo '../../web/avatar/tmp/' . $avatar . ''?>">
+					</div>
+				</div>
 			</div>
 			<div class="buttons">
 				<input class="button" name="back_edit" type="submit" value="Sửa lại">

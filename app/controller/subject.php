@@ -35,11 +35,14 @@
 		} elseif (isset($_POST["back_edit"])) {
 			$subject = $_SESSION['subject_edited'];
 			$name = $subject["name"];
+			$avatar = "../tmp/" . $subject["avatar"];
 			$description = $subject["description"];
 			$school_year = $subject["school_year"];
 			include '../view/subject_edit_input.php';
 		} elseif (isset($_POST["edit_submit"])) {
 			$errors = array();
+			$subject = $_SESSION['subject_editing'];
+			$avatar = $subject["avatar"];
 			if (empty($_POST["new_name"])) {
 				$name = "";
 				$errors["name"] = "Hãy nhập tên!";
@@ -58,28 +61,44 @@
 			} else {
 				$description = format($_POST["new_description"]);
 			}
-			if (check($name, $school_year, $description)) {
+			if ($_FILES["new_avatar"]["size"] != 0) {
+				$extension = explode(".", $_FILES["new_avatar"]["name"])[1];
+				$avatar = $name . "." . $extension;
+				$_SESSION["subject_avatar_edited"] = $avatar;
+			}
+			if (check($name, $school_year, $description) && !isset($_SESSION["subject_avatar_edited"])) {
 				$errors["duplicate"] = "Môn học đã tồn tại!";
 			}
 			if (count($errors) > 0) {
 				include '../view/subject_edit_input.php';
 			} else {
-				$_SESSION['subject_edited'] = array("name" => $name, "description" => $description, "school_year" => $school_year);
+				if (!isset($_SESSION["subject_avatar_edited"])) {
+					copy("../../web/avatar/subject/" . $avatar, "../../web/avatar/tmp/" . $avatar);
+				} else {
+					$avatar = $_SESSION["subject_avatar_edited"];
+					if ($_FILES["new_avatar"]["size"] != 0) {
+						saveTempAvatar("new_avatar", $avatar);
+					}
+				}
+				$_SESSION['subject_edited'] = array("name" => $name, "avatar" => $avatar, "description" => $description, "school_year" => $school_year);
 				include '../view/subject_edit_confirm.php';
 			}
 		} elseif (isset($_POST["edit_confirm"])) {
 			$subject = $_SESSION['subject_editing'];
 			$edited = $_SESSION['subject_edited'];
-			editSubject($subject["id"], $edited["name"], $edited["description"], $edited["school_year"]);
+			saveAvatar($subject["avatar"], $edited["avatar"]);
+			editSubject($subject["id"], $edited["avatar"], $edited["name"], $edited["description"], $edited["school_year"]);
 			include_once '../view/subject_edit_complete.php';
 			unset($_SESSION['subject_editing']);
 			unset($_SESSION['subject_edited']);
+			unset($_SESSION['subject_avatar_edited']);
 		} elseif (isset($_POST["back_add"])) {
 			$subject = $_SESSION['subject_adding'];
 			$name = $subject["name"];
+			$avatar = "../tmp/" . $subject["avatar"];
 			$description = $subject["description"];
 			$school_year = $subject["school_year"];
-			include '../view/subject_edit_input.php';
+			include '../view/subject_add_input.php';
 		} elseif (isset($_POST['add_submit'])) {
 			$errors = array();
 			if (empty($_POST["add_name"])) {
@@ -102,18 +121,28 @@
 					$errors["duplicate"] = "Môn học đã tồn tại!";
 				}
 			}
+			if ($_FILES["add_avatar"]["size"] != 0) {
+				$_SESSION["subject_avatar_adding"] = true;
+				$avatar = $name . "." . explode(".", $_FILES["add_avatar"]["name"])[1];
+				saveTempAvatar("add_avatar", $avatar);
+			} elseif (!isset($_SESSION["subject_avatar_adding"])) {
+				$errors["avatar"] = "Hãy chọn ảnh đại diện!";
+				$avatar = "";
+			}
 			if (count($errors) > 0) {
 				include '../view/subject_add_input.php';
 			} else {
-				$_SESSION['subject_adding'] = array("name" => $name, "description" => $description, "school_year" => $school_year);
+				$_SESSION['subject_adding'] = array("name" => $name, "avatar" => $avatar, "description" => $description, "school_year" => $school_year);
 				include '../view/subject_add_confirm.php';
 				unset($_SESSION['add_subject']);
 			}
 		} elseif (isset($_POST['add_confirm'])) {
 			$subject = $_SESSION['subject_adding'];
-			addSubject($subject[0], $subject[1], $subject[2]);
+			saveAvatar("temp.jpg", $subject["avatar"]);
+			addSubject($subject["name"], $subject["avatar"], $subject["description"], $subject["school_year"]);
 			include '../view/subject_add_complete.php';
 			unset($_SESSION['subject_adding']);
+			unset($_SESSION['subject_avatar_adding']);
 		} else {
 			for ($i = 0; $i < $count; $i++) {
 				$subject = $subjects[$i];
@@ -124,6 +153,7 @@
 					$_SESSION['subject_editing'] = $subject;
 					$name = $subject["name"];
 					$school_year = $subject["school_year"];
+					$avatar = $subject["avatar"];
 					$description = $subject["description"];
 					include "../view/subject_edit_input.php";
 				}

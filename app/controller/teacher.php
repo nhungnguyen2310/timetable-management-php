@@ -40,7 +40,6 @@
 			$subject = getSubjectName($teacher["subject_id"]);
 			$degree = $teacher["degree"];
 			$avatar = "../tmp/" . $teacher["avatar"];
-
 			$description = $teacher["description"];
 			include '../view/teacher_edit_input.php';
 		} elseif (isset($_POST["edit_submit"])) {
@@ -92,7 +91,6 @@
 						saveTempAvatar("new_avatar", $avatar);
 					}
 				}
-				console_log($avatar);
 				$_SESSION['teacher_edited'] = array("name" => $name, "avatar" => $avatar, "description" => $description, "subject_id" => $subject_id, "degree" => $degree);
 				include_once '../view/teacher_edit_confirm.php';
 			}
@@ -139,12 +137,13 @@
 			} else {
 				$description = format($_POST["add_description"]);
 			}
-			if ($_FILES["add_avatar"]['size'] == 0) {
-				$errors["avatar"] = "Hãy chọn ảnh đại diện!";
-				$avatar = "";
-			} else {
+			if ($_FILES["add_avatar"]['size'] != 0) {
+				$_SESSION["teacher_avatar_adding"] = true;
 				$avatar = $name . "." . explode(".", $_FILES["add_avatar"]["name"])[1];
 				saveTempAvatar("add_avatar", $avatar);
+			} elseif (!isset($_SESSION["teacher_avatar_adding"])) {
+				$errors["avatar"] = "Hãy chọn ảnh đại diện!";
+				$avatar = "";
 			}
 			if (check($name, $avatar, $description, $subject_id, $degree)) {
 				$errors["duplicate"] = "Giáo viên đã tồn tại!";
@@ -162,6 +161,7 @@
 			addTeacher($teacher["name"], $teacher["avatar"], $teacher["description"], $teacher["subject_id"], $teacher["degree"]);
 			include '../view/teacher_add_complete.php';
 			unset($_SESSION['teacher_adding']);
+			unset($_SESSION['teacher_avatar_adding']);
 		} else {
 			for ($i = 0; $i < $count; $i++) {
 				$teacher = $teachers[$i];

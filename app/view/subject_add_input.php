@@ -14,7 +14,7 @@
 
 <body>
 	<div class="container">
-		<form action="" method="POST">
+		<form action="" method="POST" enctype="multipart/form-data">
 			<div class="form_title">
 				<span><?php echo "THÊM THÔNG TIN MÔN HỌC"?></span>
 			</div>
@@ -79,6 +79,13 @@
 					</div>
 					<textarea class="form_item_textarea" name="add_description" placeholder="Nhập mô tả chi tiết" maxlength="1000"><?php if (isset($description) && !isset($errors["duplicate"])) { echo $description; }?></textarea>
 				</div>
+				<div class="form_error">
+					<?php
+						if (isset($errors["avatar"])) {
+							echo '<span class="error">' . $errors["avatar"] . '</span>';
+						}
+					?>
+				</div>
 				<div class="form_item">
 					<div class="form_item_title">
 						<label class="label"><?php echo "Ảnh đại diện"?></label>
@@ -88,15 +95,14 @@
 							<?php
 								$avt = "temp.jpg";
 								if (!empty($avatar)) $avt = "tmp/" . $avatar;
-								else $avt = "subject/" . $avt;
 								echo "<img id='add_avatar' src='../../web/avatar/$avt'>"
 							?>
 						</div>
 						<div class="form_item_file" id="browse">
-							<div class="form_item_filename" id="filename"><?php if (str_contains($avt, "tmp")) { echo explode("/", $avt)[1]; } ?></div>
+							<div class="form_item_filename" id="filename"></div>
 							<div class="form_item_button">
-								<label class="form_item_upload" for="_avatar"><?php echo "Browse"?></label>
-								<input type="file" id="_avatar" name="add_avatar" accept="image/*"/>
+								<label class="form_item_upload" for="avatar"><?php echo "Browse"?></label>
+								<input type="file" id="avatar" name="add_avatar" accept="image/*"/>
 							</div>
 						</div>
 					</div>
@@ -111,9 +117,9 @@
 </body>
 
 <script>
-	$('#_avatar').change(function() {
+	$('#avatar').change(function() {
 		var i = $(this).prev('label').clone();
-		var file = $('#_avatar')[0].files[0].name;
+		var file = $('#avatar')[0].files[0].name;
 		document.getElementById("filename").innerHTML = file;
 		document.getElementById("add_avatar").src = window.URL.createObjectURL(this.files[0]);
 	});
