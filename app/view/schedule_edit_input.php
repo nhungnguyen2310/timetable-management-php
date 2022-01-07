@@ -212,7 +212,6 @@
 					<textarea class="form_item_textarea" name="new_notes" placeholder="Nhập ghi chú" maxlength="1000"><?php echo $schedule["notes"]?></textarea>
 				</div>
 			</div>
-			</div>
 			<div class="buttons">
 				<input class="button" name="back" type="submit" value="Quay lại">
 				<input class="button" name="edit_submit" type="submit" value="Xác nhận">

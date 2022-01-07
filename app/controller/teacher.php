@@ -138,19 +138,20 @@
 				$description = format($_POST["add_description"]);
 			}
 			if ($_FILES["add_avatar"]['size'] != 0) {
-				$_SESSION["teacher_avatar_adding"] = true;
 				$avatar = $name . "." . explode(".", $_FILES["add_avatar"]["name"])[1];
+				$_SESSION["teacher_avatar_adding"] = $avatar;
 				saveTempAvatar("add_avatar", $avatar);
 			} elseif (!isset($_SESSION["teacher_avatar_adding"])) {
 				$errors["avatar"] = "Hãy chọn ảnh đại diện!";
 				$avatar = "";
 			}
-			if (check($name, $avatar, $description, $subject_id, $degree)) {
+			if (check($name, $description, $subject_id, $degree)) {
 				$errors["duplicate"] = "Giáo viên đã tồn tại!";
 			}
 			if (count($errors) > 0) {
 				include '../view/teacher_add_input.php';
 			} else {
+				$avatar = $_SESSION["teacher_avatar_adding"];
 				$_SESSION['teacher_adding'] = array("name" => $name, "avatar" => $avatar, "description" => $description, "subject_id" => $subject_id, "degree" => $degree);
 				include '../view/teacher_add_confirm.php';
 				unset($_SESSION['add_teacher']);
