@@ -39,7 +39,8 @@
 			$name = $teacher["name"];
 			$subject = getSubjectName($teacher["subject_id"]);
 			$degree = $teacher["degree"];
-			$avatar = $teacher["avatar"];
+			$avatar = "../tmp/" . $teacher["avatar"];
+
 			$description = $teacher["description"];
 			include '../view/teacher_edit_input.php';
 		} elseif (isset($_POST["edit_submit"])) {
@@ -69,6 +70,7 @@
 			if ($_FILES["new_avatar"]['size'] != 0) {
 				$extension = explode(".", $_FILES["new_avatar"]["name"])[1];
 				$avatar = $name . "." . $extension;
+				$_SESSION["teacher_avatar_edited"] = $avatar;
 			}
 			if (empty($_POST["new_description"])) {
 				$errors["description"] = "Hãy nhập mô tả chi tiết!";
@@ -76,17 +78,21 @@
 			} else {
 				$description = format($_POST["new_description"]);
 			}
-			if (check($name, $description, $subject_id, $degree)) {
+			if (check($name, $description, $subject_id, $degree) && !isset($_SESSION["teacher_avatar_edited"])) {
 				$errors["duplicate"] = "Giáo viên đã tồn tại!";
 			}
 			if (count($errors) > 0) {
 				include '../view/teacher_edit_input.php';
 			} else {
-				if ($_FILES["new_avatar"]['size'] == 0) {
-					copy("../../web/avatar/" . $avatar, "../../web/avatar/tmp/" . $avatar);
+				if (!isset($_SESSION["teacher_avatar_edited"])) {
+					copy("../../web/avatar/teacher/" . $avatar, "../../web/avatar/tmp/" . $avatar);
 				} else {
-					saveTempAvatar("new_avatar", $avatar);
+					$avatar = $_SESSION["teacher_avatar_edited"];
+					if ($_FILES["new_avatar"]['size'] != 0) {
+						saveTempAvatar("new_avatar", $avatar);
+					}
 				}
+				console_log($avatar);
 				$_SESSION['teacher_edited'] = array("name" => $name, "avatar" => $avatar, "description" => $description, "subject_id" => $subject_id, "degree" => $degree);
 				include_once '../view/teacher_edit_confirm.php';
 			}
@@ -96,6 +102,7 @@
 			saveAvatar($teacher["avatar"], $edited["avatar"]);
 			editTeacher($teacher["id"], $edited["name"], $edited["avatar"], $edited["description"], $edited["subject_id"], $edited["degree"]);
 			include_once '../view/teacher_edit_complete.php';
+			unset($_SESSION["teacher_avatar_edited"]);
 			unset($_SESSION['teacher_editing']);
 			unset($_SESSION['teacher_edited']);
 		} elseif (isset($_POST["back_add"])) {

@@ -59,9 +59,9 @@
 
 	function saveAvatar($old, $new) {
 		global $db;
-		$old_path = "../../web/avatar/" . $old;
+		$old_path = "../../web/avatar/teacher/" . $old;
 		$tmp_path = "../../web/avatar/tmp/" . $new;
-		$new_path = "../../web/avatar/" . $new;
+		$new_path = "../../web/avatar/teacher/" . $new;
 		if (file_exists($old_path) && $old != "temp.jpg") {
 			unlink($old_path);
 		}

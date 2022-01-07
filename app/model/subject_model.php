@@ -54,6 +54,24 @@
 		$statement->execute();
 	}
 
+	function saveTempAvatar($file, $new_name) {
+		global $db;
+		$tempname = $_FILES[$file]["tmp_name"];
+		$tmp_path = "../../web/avatar/tmp/" . $new_name;
+		move_uploaded_file($tempname, $tmp_path);
+	}
+
+	function saveAvatar($old, $new) {
+		global $db;
+		$old_path = "../../web/avatar/subject/" . $old;
+		$tmp_path = "../../web/avatar/tmp/" . $new;
+		$new_path = "../../web/avatar/subject/" . $new;
+		if (file_exists($old_path) && $old != "temp.jpg") {
+			unlink($old_path);
+		}
+		rename($tmp_path, $new_path);
+	}
+
 	function check($name, $school_year, $description) {
 		global $db;
 		$query = "SELECT * FROM subjects WHERE name = '$name' AND school_year = '$school_year' AND description = '$description'";

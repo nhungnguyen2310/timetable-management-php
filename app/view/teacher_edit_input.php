@@ -95,7 +95,7 @@
 					</div>
 					<div class="form_item_image">
 						<div class="form_item_avatar">
-							<img id="new_avatar" src="<?php echo '../../web/avatar/' . $avatar?>">
+							<img id="new_avatar" src="<?php echo '../../web/avatar/teacher/' . $avatar?>">
 						</div>
 						<div class="form_item_file" id="browse">
 							<div class="form_item_filename" id="filename"></div>

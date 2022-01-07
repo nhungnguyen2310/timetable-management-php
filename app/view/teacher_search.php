@@ -85,7 +85,7 @@
 								$teacher = $teachers[$i];
 								echo "<tr>";
 								echo "<td>" . $i+1 . "</td>";
-								echo "<td class='td_avatar'><img src='../../web/avatar/" . $teacher["avatar"] . "''></td>";
+								echo "<td class='td_avatar'><img src='../../web/avatar/teacher/" . $teacher["avatar"] . "''></td>";
 								echo "<td>" . $teacher["name"] . "</td>";
 								echo "<td>" . $teacher["degree"] . "</td>";
 								echo "<td>" . getSubjectName($teacher["subject_id"]) . "</td>";
