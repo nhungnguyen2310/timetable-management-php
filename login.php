@@ -31,7 +31,7 @@
 			if (strlen($_POST["username"]) < 4) {
 				$errors["username"] = "Hãy nhập tài khoản có tối thiểu 4 ký tự!";
 			} else {
-				$username = format($_POST["username"]);
+				$username = $_POST["username"];
 			}
 		}
 
@@ -41,7 +41,7 @@
 			if (strlen($_POST["password"]) < 6) {
 				$errors["password"] = "Hãy nhập mật khẩu có tối thiểu 6 ký tự!";
 			} else {
-				$password = format($_POST["password"]);
+				$password = $_POST["password"];
 				$encrypted_password = md5($password);
 			}
 		}
@@ -84,15 +84,19 @@
 				<div class="form_label">
 					<label class="label" for="username"><?php echo "Tên đăng nhập" ?></label>
 				</div>
-				<input type="text" name="username" class="form_input" maxlength='10' placeholder="Tên đăng nhập" id="username" value="<?php echo $username; ?>">
+				<input type="text" id='name_id' name="username" class="form_input" maxlength='10' placeholder="Tên đăng nhập" id="username" value="<?php echo $username; ?>">
 			</div>
 
 			<div class="form">
 				<div class="form_label">
 					<label class="label" for="password]"><?php echo "Mật khẩu" ?></label>
 				</div>
-				<input type="password" name="password" class="form_input" maxlength='64' placeholder="Mật khẩu" id="password" value="<?php if (!empty($password)) echo $password; ?>">
+				<input type="password" id='password_id' name="password" class="form_input" maxlength='64' placeholder="Mật khẩu" id="password" value="<?php if (!empty($password)) echo $password; ?>">
 			</div>
+			<script type="text/javascript">
+				document.getElementById('name_id').value = "<?php echo $_POST['username'];?>";
+				document.getElementById('password_id').value = "<?php echo $_POST['password'];?>";
+			</script>
 
 			<div class="reset">
 				<a href="app/controller/resetpassword.php">Quên mật khẩu</a>
