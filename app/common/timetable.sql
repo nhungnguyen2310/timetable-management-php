@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 05, 2022 at 12:43 PM
+-- Generation Time: Jan 07, 2022 at 04:53 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.10
 
@@ -66,7 +66,7 @@ CREATE TABLE `schedules` (
   `teacher_id` int(10) NOT NULL,
   `weekday` char(10) NOT NULL,
   `lesson` char(255) NOT NULL,
-  `notes` text DEFAULT NULL,
+  `notes` text NOT NULL,
   `updated` datetime NOT NULL DEFAULT current_timestamp(),
   `created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -91,8 +91,9 @@ INSERT INTO `schedules` (`id`, `teacher_id`, `weekday`, `lesson`, `notes`, `upda
 
 CREATE TABLE `subjects` (
   `id` int(10) NOT NULL,
+  `avatar` varchar(250) NOT NULL,
   `name` varchar(250) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text NOT NULL,
   `school_year` char(10) NOT NULL,
   `updated` datetime NOT NULL DEFAULT current_timestamp(),
   `created` datetime NOT NULL DEFAULT current_timestamp()
@@ -102,14 +103,16 @@ CREATE TABLE `subjects` (
 -- Dumping data for table `subjects`
 --
 
-INSERT INTO `subjects` (`id`, `name`, `description`, `school_year`, `updated`, `created`) VALUES
-(3, 'Giải tích', 'Dạy bằng tiếng Ý', 'Năm 2', '2022-01-05 18:23:39', '2021-12-28 02:59:44'),
-(4, 'Hoá học đại cương', 'Dạy cho trường ngoài', 'Năm 1', '2022-01-05 18:23:23', '2021-12-28 02:59:58'),
-(5, 'Vật lý lượng tử', 'Môn thí điểm', 'Năm 4', '2022-01-05 18:23:12', '2021-12-28 03:00:10'),
-(6, 'Xác suất thống kê', 'Dạy ngoài giờ', 'Năm 3', '2022-01-05 18:23:05', '2021-12-28 03:00:26'),
-(8, 'Đại số tuyến tính', 'Môn tự chọn', 'Năm 1', '2022-01-05 18:22:58', '2021-12-29 23:22:48'),
-(10, 'Văn học thế giới', 'Dạy bằng tiếng Pháp', 'Năm 3', '2022-01-05 18:22:52', '2021-12-29 23:28:00'),
-(11, 'Toán rời rạc', 'Dạy bằng tiếng Anh', 'Năm 1', '2022-01-05 06:53:04', '2021-12-29 23:42:13');
+INSERT INTO `subjects` (`id`, `avatar`, `name`, `description`, `school_year`, `updated`, `created`) VALUES
+(3, 'Giải tích.jpg', 'Giải tích', 'Dạy bằng tiếng Ý', 'Năm 2', '2022-01-05 18:23:39', '2021-12-28 02:59:44'),
+(4, 'Hóa học đại cương.jpg', 'Hóa học đại cương', 'Dạy cho trường ngoài', 'Năm 1', '2022-01-05 18:23:23', '2021-12-28 02:59:58'),
+(5, 'Vật lý lượng tử.jpg', 'Vật lý lượng tử', 'Môn thí điểm', 'Năm 4', '2022-01-05 18:23:12', '2021-12-28 03:00:10'),
+(6, 'Xác suất thống kê.jpg', 'Xác suất thống kê', 'Dạy ngoài giờ', 'Năm 3', '2022-01-05 18:23:05', '2021-12-28 03:00:26'),
+(8, 'Đại số tuyến tính.jpg', 'Đại số tuyến tính', 'Môn tự chọn', 'Năm 1', '2022-01-05 18:22:58', '2021-12-29 23:22:48'),
+(10, 'Văn học thế giới.jpg', 'Văn học thế giới', 'Dạy bằng tiếng Pháp', 'Năm 3', '2022-01-05 18:22:52', '2021-12-29 23:28:00'),
+(11, 'Toán rời rạc.jpg', 'Toán rời rạc', 'Dạy bằng tiếng Anh', 'Năm 1', '2022-01-05 06:53:04', '2021-12-29 23:42:13'),
+(26, 'Triết học Mác - Lênin.jpg', 'Triết học Mác - Lênin', 'Môn chung toàn trường', 'Năm 2', '2022-01-07 22:46:50', '2022-01-07 22:42:28'),
+(27, 'Xử lý ảnh.jpg', 'Xử lý ảnh', 'Dạy bằng tiếng Anh', 'Năm 4', '2022-01-07 22:48:35', '2022-01-07 22:47:36');
 
 -- --------------------------------------------------------
 
@@ -120,8 +123,8 @@ INSERT INTO `subjects` (`id`, `name`, `description`, `school_year`, `updated`, `
 CREATE TABLE `teachers` (
   `id` int(10) NOT NULL,
   `name` varchar(250) NOT NULL,
-  `avatar` varchar(250) DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `avatar` varchar(250) NOT NULL,
+  `description` text NOT NULL,
   `subject_id` int(10) NOT NULL,
   `degree` char(30) NOT NULL,
   `updated` datetime NOT NULL DEFAULT current_timestamp(),
@@ -140,7 +143,7 @@ INSERT INTO `teachers` (`id`, `name`, `avatar`, `description`, `subject_id`, `de
 (6, 'Phan Văn H', 'Phan Văn H.jpg', 'Đại học Bách khoa', 5, 'Cử nhân', '2022-01-05 18:11:53', '2021-12-28 03:10:10'),
 (7, 'Nguyễn Thị C', 'Nguyễn Thị C.jpg', 'Đại học Công nghệ', 6, 'Thạc sĩ', '2022-01-05 18:11:39', '2021-12-28 03:10:31'),
 (11, 'Nguyễn Thị X', 'Nguyễn Thị X.jpg', 'Đại học Khoa học Tự nhiên', 8, 'Giáo sư', '2022-01-05 18:11:14', '2021-12-31 05:03:12'),
-(22, 'Nguyễn Y', 'Nguyễn Y.jpg', 'Đại học Khoa học Tự nhiên', 5, 'Tiến sĩ', '2022-01-05 18:10:18', '2022-01-01 23:19:30');
+(22, 'Nguyễn Y', 'Nguyễn Y.jpg', 'Đại học Khoa học Tự nhiên', 5, 'Tiến sĩ', '2022-01-07 20:05:25', '2022-01-01 23:19:30');
 
 --
 -- Indexes for dumped tables
@@ -193,13 +196,13 @@ ALTER TABLE `schedules`
 -- AUTO_INCREMENT for table `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- Constraints for dumped tables
